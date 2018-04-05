@@ -1,0 +1,29 @@
+service: ideas
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: us-east-2
+  environment:
+    ND_PG_DB_NAME: ${env:ND_PG_DB_NAME}
+    ND_PG_DB_USER: ${env:ND_PG_DB_USER}
+    ND_PG_DB_PASSWORD: ${env:ND_PG_DB_PASSWORD}
+    ND_PG_DB_HOST: ${env:ND_PG_DB_HOST}
+    LAMBDA_VPC_EXECUTION_ROLE: ${env:LAMBDA_VPC_EXECUTION_ROLE}
+  role: "${self:provider.environment.LAMBDA_VPC_EXECUTION_ROLE}"
+
+functions:
+  list:
+    handler: handlers/list.default
+    events:
+      - http:
+          path: ideas
+          method: get
+          cors: true
+  create:
+    handler: handlers/create.default
+    events:
+      - http:
+          path: ideas
+          method: post
+          cors: true
+
